@@ -75,6 +75,7 @@ public class WindSource : GravitySource, IRequireCleanup
     #region Cleanup
     public void OnDisable()
     {
+        CustomGravity.Unregister(this);
         if (!GameManager.cleanedUp) OnCleanup();
     }
 

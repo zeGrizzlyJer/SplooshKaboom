@@ -20,6 +20,7 @@ public class GameUI : MonoBehaviour, IRequireCleanup
     public Slider powerSlider;
     public Image angleIcon;
     public Image rotationIcon;
+    public GameObject arrow;
 
     private void Awake()
     {
@@ -27,6 +28,11 @@ public class GameUI : MonoBehaviour, IRequireCleanup
         GameManager.Instance.OnBarrelValueChange += UpdateBarrelCounter;
         GameManager.Instance.OnRoundStart += UpdateRoundDisplay;
         GameManager.Instance.OnApplicationCleanup += OnCleanup;
+        WindSource temp = FindAnyObjectByType<WindSource>();
+        if (temp && arrow)
+        {
+            temp.windDirectionChanged += UpdateWindArrow;
+        }
     }
 
     public void OnDisable()
@@ -57,6 +63,17 @@ public class GameUI : MonoBehaviour, IRequireCleanup
         roundDisplay.gameObject.SetActive(false);
     }
 
+    public void UpdateWindArrow(Vector3 dir)
+    {
+        float angle = Vector3.Angle(Vector3.forward, dir);
+        if (dir.x < 0) angle *= -1;
+        Debug.Log("Vector Dir: " + dir + ", Angle: " + angle);
+        if (!arrow) return;
+        Vector3 currentRot = arrow.transform.eulerAngles;
+        currentRot.y = angle;
+        arrow.transform.eulerAngles = currentRot;
+    }
+
     public void UpdateBarrelCounter(int value)
     {
         barrelCounter.text = value.ToString() + " / " + GameManager.Instance.maxBarrels.ToString();
@@ -70,7 +87,7 @@ public class GameUI : MonoBehaviour, IRequireCleanup
     public void UpdateAngleDisplay(float value)
     {
         angleDisplay.text = ((int)value).ToString() + "*";
-        angleIcon.rectTransform.localRotation = Quaternion.Euler(0, 0, value);
+        if (angleIcon) angleIcon.rectTransform.localRotation = Quaternion.Euler(0, 0, value);
     }
 
     public void UpdatePowerDisplay(float value)
@@ -82,6 +99,6 @@ public class GameUI : MonoBehaviour, IRequireCleanup
     public void UpdateRotationDisplay(float value)
     {
         rotationDisplay.text = ((int)value).ToString() + "*";
-        rotationIcon.rectTransform.localRotation = Quaternion.Euler(0, 0, value - 90);
+        if (rotationIcon) rotationIcon.rectTransform.localRotation = Quaternion.Euler(0, 0, value - 90);
     }
 }

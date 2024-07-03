@@ -48,4 +48,9 @@ public static class CustomGravity
         }
         return -g.normalized;
     }
+
+    public static void CheckSources()
+    {
+        Debug.Log("Sources: " + sources.Count);
+    }
 }
