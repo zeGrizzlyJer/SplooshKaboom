@@ -35,7 +35,7 @@ public class TornadoController : MonoBehaviour, IRequireCleanup
         {
             pfxOriginalDurations[i] = pfxSystems[i].main.startLifetime.constant;
         }
-        FadeOut();
+        DeactivateMaterials();
         if (barrelSpawner) target = barrelSpawner.GetAccessiblePosition();
         GameManager.Instance.OnRoundStart += FadeOut;
         GameManager.Instance.OnBarrelValueChange += FadeIn;
@@ -157,6 +157,20 @@ public class TornadoController : MonoBehaviour, IRequireCleanup
                 matOriginalDissolve[i + j] = materials[i + j].GetFloat(dissolveID);
                 Debug.Log("Prime: " + matOriginalDissolve[i + j]);
             }
+        }
+    }
+
+    private void DeactivateMaterials()
+    {
+        tornado.enabled = false;
+        foreach (ParticleSystem pfx in pfxSystems)
+        {
+            var main = pfx.main;
+            main.startLifetime = 0f;
+        }
+        for (int i = 0; i < materials.Length; i++)
+        {
+            materials[i].SetFloat(dissolveID, 1f);
         }
     }
 

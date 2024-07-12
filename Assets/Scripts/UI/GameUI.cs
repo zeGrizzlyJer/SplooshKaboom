@@ -67,7 +67,6 @@ public class GameUI : MonoBehaviour, IRequireCleanup
     {
         float angle = Vector3.Angle(Vector3.forward, dir);
         if (dir.x < 0) angle *= -1;
-        Debug.Log("Vector Dir: " + dir + ", Angle: " + angle);
         if (!arrow) return;
         Vector3 currentRot = arrow.transform.eulerAngles;
         currentRot.y = angle;

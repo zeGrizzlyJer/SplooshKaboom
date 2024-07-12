@@ -13,6 +13,12 @@ public class CannonTelemetry : MonoBehaviour
     public int totalPoints = 20;
     public float maxTime = 2.0f;
     private float timeStep;
+    public float telemetryScale = 2f;
+    public float cycleTime = 0.2f;
+    private int currentIndex = 0;
+    private int previousIndex = 0;
+    private float telemetryTimer = 0f;
+    public Color activeColour = Color.white;
 
     List<GameObject> telemetryPoints;
     private CannonController cannon;
@@ -20,7 +26,6 @@ public class CannonTelemetry : MonoBehaviour
     private void Start()
     {
         cannon = GetComponent<CannonController>();
-        timeStep = maxTime / totalPoints;
         telemetryPoints = new List<GameObject>();
         for (int i = 0; i < totalPoints; i++)
         {
@@ -28,10 +33,36 @@ public class CannonTelemetry : MonoBehaviour
             point.SetActive(false);
             telemetryPoints.Add(point);
         }
+        telemetryPoints[0].transform.localScale *= telemetryScale;
+    }
+
+    private void Update()
+    {
+        telemetryTimer += Time.deltaTime;
+        if (telemetryTimer >= cycleTime)
+        {
+            telemetryTimer = 0f;
+            currentIndex = (currentIndex + (1 * visualTelemetryRatio));
+            if (currentIndex >= telemetryPoints.Count) currentIndex = 0;
+            ChangeTelemetrySettings(currentIndex, telemetryScale, activeColour);
+            /*telemetryPoints[currentIndex].transform.localScale *= telemetryScale;
+            var mat = telemetryPoints[currentIndex].GetComponent<MeshRenderer>().material;
+            mat.SetColor("_EmissionColor", activeColour);*/
+            ChangeTelemetrySettings(previousIndex, 1/telemetryScale, Color.white);
+            previousIndex = currentIndex;
+        }
+    }
+
+    private void ChangeTelemetrySettings(int index, float scale, Color newColor)
+    {
+        var mat = telemetryPoints[index].GetComponentInChildren<MeshRenderer>().material;
+        mat.SetColor("_EmissionColor", newColor);
+        telemetryPoints[index].transform.localScale *= scale;
     }
 
     public void UpdateTelemetry(Vector3 startPosition, Vector3 startVelocity)
     {
+        timeStep = maxTime / totalPoints;
         if (startVelocity.magnitude <= 1f)
         {
             for (int i = 0; i < totalPoints; i++)
@@ -40,27 +71,32 @@ public class CannonTelemetry : MonoBehaviour
             }
             return;
         }
-        Vector3 previousPosition = startPosition;
-        Vector3 previousVelocity = startVelocity;
+        Vector3 currentPosition = startPosition;
+        Vector3 currentVelocity = startVelocity;
+        Vector3 currentAcceleration = CustomGravity.GetGravity(currentPosition);
         for (int i = 0; i < totalPoints; i++)
         {
-            Vector3 pointPosition = CalculatePositionAtTime(previousPosition, previousVelocity, timeStep);
-            Vector3 pointVelocity = CalculateVelocityAtTime(previousPosition, previousVelocity, timeStep);
-            previousPosition = pointPosition;
-            previousVelocity = pointVelocity;
+            Vector3 newPosition = currentPosition + currentVelocity * timeStep + 0.5f * currentAcceleration * Mathf.Pow(timeStep, 2);
+            Vector3 newAcceleration = CustomGravity.GetGravity(newPosition);
+            Vector3 newVelocity = currentVelocity + 0.5f * (currentAcceleration + newAcceleration) * timeStep;
 
-            telemetryPoints[i].transform.position = pointPosition;
-            telemetryPoints[i].SetActive(true);
+            telemetryPoints[i].transform.position = newPosition;
+
+            if (i % visualTelemetryRatio == 0) telemetryPoints[i].SetActive(true);
+            else telemetryPoints[i].SetActive(false);
+            
+
+            currentPosition = newPosition;
+            currentVelocity = newVelocity;
+            currentAcceleration = newAcceleration;
         }
     }
 
-    Vector3 CalculatePositionAtTime(Vector3 previousPosition, Vector3 previousVelocity, float time)
+    public void DisableTelemetry()
     {
-        return previousPosition + (previousVelocity * time) + (0.5f * CustomGravity.GetGravity(previousPosition) * time * time); 
-    }
-    
-    Vector3 CalculateVelocityAtTime(Vector3 previousPositon, Vector3 previousVelocity, float time)
-    {
-        return previousVelocity + (CustomGravity.GetGravity(previousPositon) * time);
+        foreach(GameObject temp in telemetryPoints)
+        {
+            temp.SetActive(false);
+        }
     }
 }

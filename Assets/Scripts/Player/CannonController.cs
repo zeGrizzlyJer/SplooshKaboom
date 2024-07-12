@@ -35,7 +35,7 @@ public class CannonController : MonoBehaviour, IRequireCleanup
         GameManager.Instance.OnApplicationCleanup += OnCleanup;
         input = new GameControls();
         input.Enable();
-
+        gUI.UpdatePowerDisplay(cannonPower);
         #region Delegates
         input.Pause.Activate.performed += ctx => Pause(ctx);
         input.Player.ChangeRotation.performed += ctx => RotateCannon(ctx);
@@ -57,7 +57,7 @@ public class CannonController : MonoBehaviour, IRequireCleanup
         UpdatePower();
 
         gameObject.transform.rotation = Quaternion.Euler(-cannonAngle, cannonRotation, 0);
-        telemetry.UpdateTelemetry(shootSpot.transform.position, shootSpot.transform.forward * cannonPower * powerModifier);
+        if (GameManager.Instance.canShoot) telemetry.UpdateTelemetry(shootSpot.transform.position, shootSpot.transform.forward * cannonPower * powerModifier);
     }
 
     private void UpdatePower()
@@ -171,6 +171,7 @@ public class CannonController : MonoBehaviour, IRequireCleanup
         GameManager.Instance.canShoot = false;
         GameManager.Instance.ShotsRemaining -= 1;
         ballPool.Launch(shootSpot.transform.position, transform.rotation, cannonPower * powerModifier);
+        telemetry.DisableTelemetry();
     }
     #endregion
 

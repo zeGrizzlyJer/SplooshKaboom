@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Cannonball : MonoBehaviour, IProjectile
 {
-    Vector3 velocity;
+    private Vector3 velocity;
+    private Vector3 acceleration;
     [SerializeField] private float minHeight = -5f;
     [SerializeField] private GameObject missEffect;
     [SerializeField] private AudioClip missSound;
@@ -18,23 +19,25 @@ public class Cannonball : MonoBehaviour, IProjectile
             Deactivate();
             LoseGame();
         }
-
-        Vector3 currentVel = velocity;
-        currentVel += CustomGravity.GetGravity(transform.position) * Time.deltaTime;
-        velocity = currentVel;
     }
 
     private void FixedUpdate()
     {
-        transform.position = transform.position + velocity * Time.fixedDeltaTime;
+        Vector3 currentPosition = transform.position;
+        Vector3 newPosition = currentPosition + velocity * Time.fixedDeltaTime + 0.5f * acceleration * Mathf.Pow(Time.fixedDeltaTime, 2);
+        Vector3 newAcceleration = CustomGravity.GetGravity(newPosition);
+
+        transform.position = newPosition;
+        velocity = velocity + 0.5f * (acceleration + newAcceleration) * Time.fixedDeltaTime;
+        acceleration = newAcceleration;
     }
     public void Launch(Vector3 pos, Quaternion rot, float power)
     {
         transform.position = pos;
         transform.rotation = rot;
         gameObject.SetActive(true);
-
         velocity = gameObject.transform.forward * power;
+        acceleration = CustomGravity.GetGravity(transform.position);
     }
 
     public void Sploosh()
@@ -74,6 +77,7 @@ public class Cannonball : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.GetComponent<AirRing>() != null) return;
         Deactivate();
     }
 }

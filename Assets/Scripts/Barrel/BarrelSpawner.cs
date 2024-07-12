@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class BarrelSpawner : MonoBehaviour, IRequireCleanup
 {
     [SerializeField] private GameObject barrelPrefab;
     [SerializeField] private float spawnHeight;
-    [SerializeField] private float minimumRange;
-    [SerializeField] private float spawnRange;
-    [SerializeField] private float spawnAngle = 40f;
+    public float minimumRange;
+    public float spawnRange;
+    public float spawnAngle;
     [SerializeField] private float spawnRadius;
     [SerializeField] private Vector3 centerPos;
     [SerializeField] private Vector3 direction;
