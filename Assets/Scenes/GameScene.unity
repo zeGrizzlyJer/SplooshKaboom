@@ -30789,7 +30789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &570006947
 RectTransform:
   m_ObjectHideFlags: 0
@@ -55897,6 +55897,7 @@ GameObject:
   - component: {fileID: 898308323}
   - component: {fileID: 898308322}
   - component: {fileID: 898308321}
+  - component: {fileID: 898308324}
   m_Layer: 0
   m_Name: AirRing
   m_TagString: Untagged
@@ -55953,13 +55954,40 @@ Transform:
   m_GameObject: {fileID: 898308320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 6, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 340019262}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &898308324
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898308320}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &935823374
 GameObject:
   m_ObjectHideFlags: 0
@@ -62061,7 +62089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1268131846
 RectTransform:
   m_ObjectHideFlags: 0
@@ -77851,11 +77879,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1340723014781710344, guid: 9d6b366c5af9ea74fa9140d040ed72f6,
-        type: 3}
-      propertyPath: roundsToWin
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 4725816340691098449, guid: 9d6b366c5af9ea74fa9140d040ed72f6,
         type: 3}
       propertyPath: m_LocalPosition.x

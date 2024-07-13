@@ -10,8 +10,8 @@ public class BarrelSpawner : MonoBehaviour, IRequireCleanup
     public float spawnRange;
     public float spawnAngle;
     [SerializeField] private float spawnRadius;
-    [SerializeField] private Vector3 centerPos;
-    [SerializeField] private Vector3 direction;
+    public Vector3 centerPos;
+    public Vector3 direction;
     private List<GameObject> barrelList;
 
     private void Start()

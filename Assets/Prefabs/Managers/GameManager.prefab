@@ -47,4 +47,4 @@ MonoBehaviour:
   maxShots: 15
   canShoot: 0
   maxBarrels: 3
-  roundsToWin: 5
+  roundsToWin: 7
