@@ -67,6 +67,7 @@ public class AirRing : MonoBehaviour, IRequireCleanup
 
     public void OnRoundStart()
     {
+        if (_anim && GameManager.Instance.GameRound != 1) _anim.SetTrigger("Shrink");
         _collider.enabled = false;
         animating = true;
     }
