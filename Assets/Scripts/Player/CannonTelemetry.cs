@@ -19,6 +19,7 @@ public class CannonTelemetry : MonoBehaviour
     private int previousIndex = 0;
     private float telemetryTimer = 0f;
     public Color activeColour = Color.white;
+    public Color normalColour = Color.yellow;
 
     List<GameObject> telemetryPoints;
     private CannonController cannon;
@@ -48,7 +49,7 @@ public class CannonTelemetry : MonoBehaviour
             /*telemetryPoints[currentIndex].transform.localScale *= telemetryScale;
             var mat = telemetryPoints[currentIndex].GetComponent<MeshRenderer>().material;
             mat.SetColor("_EmissionColor", activeColour);*/
-            ChangeTelemetrySettings(previousIndex, 1/telemetryScale, Color.white);
+            ChangeTelemetrySettings(previousIndex, 1/telemetryScale, normalColour);
             previousIndex = currentIndex;
         }
     }

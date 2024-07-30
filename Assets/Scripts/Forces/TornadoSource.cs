@@ -21,7 +21,7 @@ public class TornadoSource : GravitySource
 
         return wind;
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.color = Color.green;
@@ -56,4 +56,5 @@ public class TornadoSource : GravitySource
             Handles.DrawLine(topCircle[i], bottomCircle[i]);
         }
     }
+#endif
 }
